@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const NavBar = () => {
@@ -13,7 +14,12 @@ const NavBar = () => {
           className="bg-gray-100 w-[500px] h-[40px] rounded-full px-4"
         />
       </div>
-      <div>Options</div>
+      <div>
+        <div>Profile pic</div>
+        <div>
+          <Link href="api/auth/signin">Login</Link>
+        </div>
+      </div>
     </div>
   );
 };
