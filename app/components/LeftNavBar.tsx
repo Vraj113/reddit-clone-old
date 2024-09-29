@@ -3,7 +3,7 @@ import React from "react";
 
 const LeftNavBar = () => {
   return (
-    <div className="h-[100vh] border-r-2 p-4 text-lg">
+    <div className="h-full border-r-2 p-4 text-lg fixed z-10 bg-white mt-16 ">
       <Link href="/">
         <div className="py-2 px-4 font-semibold bg-gray-100 rounded my-2 min-w-48 cursor-pointer hover:bg-gray-100">
           Home
@@ -22,6 +22,11 @@ const LeftNavBar = () => {
       <Link href="/all">
         <div className="py-2 px-4 font-semibold  rounded my-2 min-w-48 cursor-pointer hover:bg-gray-100">
           All
+        </div>
+      </Link>
+      <Link href="/create">
+        <div className="py-2 px-4 font-semibold  rounded my-2 min-w-48 cursor-pointer hover:bg-gray-100">
+          Create New Post
         </div>
       </Link>
     </div>

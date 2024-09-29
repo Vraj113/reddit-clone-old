@@ -25,6 +25,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log(children);
   return (
     <html lang="en">
       <body
@@ -33,7 +34,8 @@ export default function RootLayout({
         <NavBar />
         <div className="grid grid-flow-col grid-cols-[20%_80%]">
           <LeftNavBar />
-          {children}
+          <div className=" h-[100vh]"></div>
+          <div className="mt-16 ">{children}</div>
         </div>
       </body>
     </html>
