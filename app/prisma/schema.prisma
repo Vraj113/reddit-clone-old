@@ -12,7 +12,7 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
- 
+
 model User {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
@@ -23,11 +23,11 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
@@ -41,12 +41,12 @@ model Account {
   scope             String?
   id_token          String? @db.String
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([provider, providerAccountId])
 }
 
@@ -59,23 +59,24 @@ model Subreddit {
 }
 
 model Posts {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
   type        String
-  userId      String     @db.ObjectId // Reference to User
-  subredditId String     @db.ObjectId // Reference to Subreddit
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  votes       Int        @default(0) 
+  userId      String   @db.ObjectId // Reference to User
+  subredditId String   @db.ObjectId // Reference to Subreddit
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  votes       Int      @default(0)
 }
+
 model Session {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
   userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -85,10 +86,10 @@ model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@unique([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @id @map("_id")
@@ -99,15 +100,16 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@unique([userId, credentialID])
 }
+
 model Comment {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   postId    String   @db.ObjectId // Reference to Post
   userId    String   @db.ObjectId // Reference to User
   content   String
-  createdAt DateTime @default(now()) 
+  createdAt DateTime @default(now())
 }
