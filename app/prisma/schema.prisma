@@ -63,8 +63,8 @@ model Posts {
   title       String
   description String
   type        String
-  userId      String   @db.ObjectId // Reference to User
-  subredditId String   @db.ObjectId // Reference to Subreddit
+  userId      String  
+  subredditId String    
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   votes       Int      @default(0)
@@ -80,15 +80,7 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
+ 
 
 // Optional for WebAuthn support
 model Authenticator {
