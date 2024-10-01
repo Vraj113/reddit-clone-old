@@ -18,7 +18,7 @@ const NavBar = async () => {
         />
       </div>
       <div>
-        {session && (
+        {/* {session && (
           <div>
             <img
               className="w-10 h-10 rounded-full"
@@ -26,7 +26,7 @@ const NavBar = async () => {
               alt=""
             />
           </div>
-        )}
+        )} */}
 
         <div>{session?.user?.name}</div>
         {!session ? (

@@ -12,7 +12,18 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+
   adapter: PrismaAdapter(prisma),
+  callbacks: {
+    async session({ session, user }) {
+      // Add user.id to the session object
+      session.user.id = user.id;
+      return session;
+    },
+  },
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+  },
 };
 
 const handler = NextAuth(authOptions);
