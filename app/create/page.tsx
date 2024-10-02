@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 
 export const Create = () => {
   const [data, setData] = useState({
-    userId: "", // userId field to associate post with user
+    userId: "",
     title: "",
     description: "",
     type: "TEXT",

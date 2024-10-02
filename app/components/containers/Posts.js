@@ -21,6 +21,7 @@ const Posts = () => {
           description={post.description}
           postedBy={post.username}
           votes={post.votes}
+          slug={post.slug}
           subredditId={post.subredditId}
         /> // Pass the post object as a prop
       ))}

@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 const NavBar = async () => {
   const session = await getServerSession(authOptions);
-  console.log(session);
+  // console.log(session);
   return (
     <div className="flex justify-between px-10 py-2  border-b-2 h-fit items-center fixed w-full  bg-white  z-20">
       <div>Logo</div>

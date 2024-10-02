@@ -54,6 +54,8 @@ model Subreddit {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String   @unique
   description String
+  image    String? 
+  bannerImage    String? 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -65,6 +67,7 @@ model Posts {
   type        String
   userId      String  
   subredditId String    
+  slug String    @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   votes       Int      @default(0)

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "../../../lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
-
+var randomstring = require("randomstring");
 export const GET = async () => {
   try {
     const posts = await prisma.posts.findMany({});
@@ -12,7 +12,6 @@ export const GET = async () => {
       acc[user.id] = user.name;
       return acc;
     }, {});
-
     const postsWithUsernames = posts.map((post) => ({
       ...post,
       username: userMap[post.userId] || "Unknown User", // Add username or "Unknown User" if not found
@@ -21,7 +20,7 @@ export const GET = async () => {
     return NextResponse.json(postsWithUsernames);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch posts" },
+      { error: "Failed to fetch posts", error },
       { status: 500 }
     );
   }
@@ -29,9 +28,10 @@ export const GET = async () => {
 
 export const POST = async (req) => {
   const body = await req.json();
-
-  const session = await getServerSession(authOptions);
-
+  const slug = randomstring.generate({
+    length: 12,
+    charset: "alphabetic",
+  });
   await prisma.posts.create({
     data: {
       title: body.title,
@@ -39,10 +39,11 @@ export const POST = async (req) => {
       type: body.type,
       userId: body.userId,
       subredditId: body.subredditId,
+      slug: slug,
     },
   });
 
-  const posts = await prisma.posts.findMany();
-  console.log(posts);
+  const posts = await prisma.posts.findMany({});
+
   return NextResponse.json(posts);
 };
