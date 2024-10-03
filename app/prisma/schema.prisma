@@ -16,6 +16,7 @@ datasource db {
 model User {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
+  username String  @default("")
   email         String?         @unique
   emailVerified DateTime?
   image         String?
@@ -65,7 +66,8 @@ model Posts {
   title       String
   description String
   type        String
-  userId      String  
+  userId      String 
+  postedBy String 
   subredditId String    
   slug String    @default("")
   createdAt   DateTime @default(now())

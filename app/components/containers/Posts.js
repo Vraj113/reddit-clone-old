@@ -6,6 +6,7 @@ const Posts = () => {
   const getPosts = async () => {
     const resonse = await fetch("api/posts", { method: "GET" });
     const data = await resonse.json();
+    console.log(data);
     setPostsData(data);
   };
   useEffect(() => {
@@ -19,7 +20,7 @@ const Posts = () => {
           key={post.id}
           title={post.title}
           description={post.description}
-          postedBy={post.username}
+          postedBy={post.postedBy}
           votes={post.votes}
           slug={post.slug}
           subredditId={post.subredditId}

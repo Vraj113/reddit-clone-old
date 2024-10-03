@@ -5,6 +5,8 @@ import { getSession } from "next-auth/react";
 export const Create = () => {
   const [data, setData] = useState({
     userId: "",
+    email: "",
+    name: "",
     title: "",
     description: "",
     type: "TEXT",
@@ -16,7 +18,12 @@ export const Create = () => {
     const fetchSession = async () => {
       const session = await getSession();
       if (session?.user?.id) {
-        setData((prevData) => ({ ...prevData, userId: session.user.id }));
+        setData((prevData) => ({
+          ...prevData,
+          userId: session.user.id,
+          email: session.user?.email,
+          name: session.user?.name,
+        }));
       }
     };
     fetchSession();
