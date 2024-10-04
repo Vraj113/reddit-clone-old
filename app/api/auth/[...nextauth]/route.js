@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "../../../../lib/prisma";
+import jwt from "jsonwebtoken"; // Import jsonwebtoken
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -13,45 +14,52 @@ export const authOptions = {
   ],
 
   adapter: PrismaAdapter(prisma),
+
+  // Enable JWT
+  session: {
+    strategy: "jwt", // Important to specify the strategy as "jwt" to use JWT for session management
+  },
+
   callbacks: {
-    // async signIn({ user }) {
-    //   console.log(user);
-    //   const existingUser = await prisma.user.findUnique({
-    //     where: { id: user.id },
-    //   });
-
-    //   if (!existingUser) {
-    //     //code to add
-
-    //     // If user doesn't exist, create a new user
-    //     if (!existingUser) {
-    //       // Assuming you want to create a username from the user's name
-    //       const username = user.name.split(" ").join("").toLowerCase(); // Create a simple username
-
-    //       await prisma.user.create({
-    //         data: {
-    //           id: user.id, // Ensure the user ID is passed from Google
-    //           name: user.name,
-    //           email: user.email,
-    //           image: user.image,
-    //           username: username, // Add the username field
-    //         },
-    //       });
-    //     }
-    //   }
-
-    //   return true; // Allow sign-in
-    // },
-
-    async session({ session, user }) {
-      // Add user.id to the session object
-      session.user.id = user.id;
+    async session({ session, token, user }) {
+      // Add token data to the session
+      if (token) {
+        session.user.id = token.id;
+        session.accessToken = token.accessToken;
+      }
       return session;
+    },
+
+    async jwt({ token, user, account, profile, isNewUser }) {
+      console.log(user);
+      let newUser = await prisma.user.findFirst({
+        where: {
+          id: user.id,
+        },
+      });
+
+      if (account) {
+        token.accessToken = account.access_token; // Store access token
+        token.id = user?.id; // Store user ID in token
+        token.username = newUser.username;
+      }
+      return token;
     },
   },
 
   jwt: {
-    secret: process.env.NEXTAUTH_SECRET,
+    async encode({ secret, token }) {
+      // Encode JWT using jsonwebtoken
+      return jwt.sign(token, secret, {
+        algorithm: "HS256",
+      });
+    },
+    async decode({ secret, token }) {
+      // Decode JWT using jsonwebtoken
+      return jwt.verify(token, secret, {
+        algorithms: ["HS256"],
+      });
+    },
   },
 };
 

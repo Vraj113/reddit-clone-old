@@ -2,12 +2,16 @@ import Link from "next/link";
 import React from "react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import ProfileToggle from "../components/ProfileToggle";
 const NavBar = async () => {
   const session = await getServerSession(authOptions);
   // console.log(session);
   return (
     <div className="flex justify-between px-10 py-2  border-b-2 h-fit items-center fixed w-full  bg-white  z-20">
-      <div>Logo</div>
+      <div>
+        <img src="/logo.png" className="h-16 w-auto" />
+      </div>
+
       <div>
         <input
           type="text"
@@ -28,16 +32,7 @@ const NavBar = async () => {
           </div>
         )} */}
 
-        <div>{session?.user?.name}</div>
-        {!session ? (
-          <div>
-            <Link href="api/auth/signin">Login</Link>
-          </div>
-        ) : (
-          <div>
-            <Link href="api/auth/signout">Logout</Link>
-          </div>
-        )}
+        <ProfileToggle />
       </div>
     </div>
   );

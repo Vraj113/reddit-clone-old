@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import NavBar from "./components/NavBar";
 import LeftNavBar from "./components/LeftNavBar";
-
+import { Providers } from "./components/provider/provider";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -28,16 +28,18 @@ export default function RootLayout({
   console.log(children);
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <NavBar />
-        <div className="grid grid-flow-col grid-cols-[20%_80%]">
-          <LeftNavBar />
-          <div className=" h-[100vh]"></div>
-          <div className="mt-16 ">{children}</div>
-        </div>
-      </body>
+      <Providers>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <NavBar />
+          <div className="grid grid-flow-col grid-cols-[20%_80%]">
+            <LeftNavBar />
+            <div className=" h-[100vh]"></div>
+            <div className="mt-20 ">{children}</div>
+          </div>
+        </body>
+      </Providers>
     </html>
   );
 }
