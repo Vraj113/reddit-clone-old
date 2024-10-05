@@ -25,7 +25,7 @@ const SubReddit = async ({ params }) => {
   }
 
   return (
-    <div>
+    <div className="mx-28">
       {subredditData && (
         <SubredditTop
           name={subredditData.name}
@@ -34,8 +34,8 @@ const SubReddit = async ({ params }) => {
           bannerImage={subredditData.bannerImage}
         />
       )}
-      <div className="w-full border-t-2 mb-4 border-zinc-400"></div>
-      <div className="text-4xl font-semibold rounded bg-zinc-50 w-fit p-2 hover:bg-zinc-100   ">
+      <div className="w-full border-t-2 mb-4 border-zinc-400 "></div>
+      <div className="text-4xl font-semibold rounded bg-zinc-50 w-fit p-2 hover:bg-zinc-100    ">
         Posts
       </div>
       {posts.length > 0 ? (

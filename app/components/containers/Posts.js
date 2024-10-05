@@ -14,7 +14,7 @@ const Posts = () => {
   }, []);
 
   return (
-    <div>
+    <div className="ml-28">
       {postsData.map((post) => (
         <Post
           key={post.id}

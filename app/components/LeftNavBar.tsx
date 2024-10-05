@@ -3,7 +3,7 @@ import React from "react";
 
 const LeftNavBar = () => {
   return (
-    <div className="h-full border-r-2 p-4 text-lg fixed z-10 bg-white mt-16 ">
+    <div className="h-full p-4 text-lg fixed z-10 bg-white mt-16 ">
       <Link href="/">
         <div className="py-2 px-4 font-semibold bg-gray-100 rounded my-2 min-w-48 cursor-pointer hover:bg-gray-100">
           Home

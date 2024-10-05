@@ -33,10 +33,10 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <NavBar />
-          <div className="grid grid-flow-col grid-cols-[20%_80%]">
+          <div className="grid grid-flow-col grid-cols-[15%_85%]">
             <LeftNavBar />
             <div className=" h-[100vh]"></div>
-            <div className="mt-20 ">{children}</div>
+            <div className="mt-20 bg-zinc-50">{children}</div>
           </div>
         </body>
       </Providers>

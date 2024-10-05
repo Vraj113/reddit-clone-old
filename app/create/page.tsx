@@ -71,7 +71,7 @@ export const Create = () => {
   };
 
   return (
-    <div className="flex-col flex gap-y-4 py-4 px-8">
+    <div className="flex-col flex gap-y-4 py-4 px-8 bg-zinc-50 h-full">
       <div className="font-semibold text-3xl">Create Post</div>
 
       <div className="flex gap-x-2 items-center text-lg">
@@ -85,33 +85,62 @@ export const Create = () => {
       </div>
 
       <div className="flex gap-x-2 p-2 my-2">
-        <div className="border-b-2 border-blue-700 cursor-pointer">Text</div>
-        <div>Images</div>
-        <div>Link</div>
+        <div
+          className={`cursor-pointer ${
+            data.type === "TEXT" ? "border-b-2 border-blue-700" : ""
+          }`}
+          onClick={() => {
+            setData({ ...data, type: "TEXT" });
+          }}
+        >
+          Text
+        </div>
+        <div
+          className={`cursor-pointer ${
+            data.type === "IMAGE" ? "border-b-2 border-blue-700" : ""
+          }`}
+          onClick={() => {
+            setData({ ...data, type: "IMAGE" });
+          }}
+        >
+          Images
+        </div>
+        <div
+          className={`cursor-pointer ${
+            data.type === "LINK" ? "border-b-2 border-blue-700" : " "
+          }`}
+          onClick={() => {
+            setData({ ...data, type: "LINK" });
+          }}
+        >
+          Link
+        </div>
       </div>
 
-      <div>
-        <div>
-          <input
-            type="text"
-            placeholder="title"
-            name="title"
-            value={data.title}
-            className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
-            onChange={onChange}
-          />
+      {data.type == "TEXT" && (
+        <div className="textClass">
+          <div>
+            <input
+              type="text"
+              placeholder="title"
+              name="title"
+              value={data.title}
+              className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
+              onChange={onChange}
+            />
+          </div>
+          <div>
+            <textarea
+              placeholder="description"
+              name="description"
+              value={data.description}
+              onChange={onChange}
+              className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
+            ></textarea>
+          </div>
         </div>
-        <div>
-          <textarea
-            placeholder="description"
-            name="description"
-            value={data.description}
-            onChange={onChange}
-            className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
-          ></textarea>
-        </div>
-      </div>
-
+      )}
+      {data.type == "IMAGE" && <div className="imageClass"></div>}
       <div>
         <button
           onClick={onSubmit}

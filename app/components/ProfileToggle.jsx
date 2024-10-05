@@ -26,8 +26,9 @@ const ProfileToggle = () => {
       )}
       {profileToggle && (
         <div className="absolute bg-white p-2 border-2 right-10">
-          <p>
+          <p className="flex items-center gap-x-5">
             <img src={session.user.image} className="w-10 h-10 rounded-full" />
+            <div>{session.user.name}</div>
           </p>
           <p className="hover:bg-zinc-300 cursor-pointer rounded p-2 my-2">
             {session.user.email}

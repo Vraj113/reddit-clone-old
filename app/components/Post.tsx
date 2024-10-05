@@ -17,7 +17,7 @@ const Post = ({
   subredditId,
 }) => {
   return (
-    <div className=" my-4 w-fit border-b-2 hover:bg-gray-200 bg-white ">
+    <div className=" my-4 w-fit border-b-2 hover:bg-gray-100 bg-white shadow-md shadow-zinc-100 rounded-lg  ">
       {" "}
       <Link href={`/r/${subredditId}/posts/${slug}`}>
         <div className="  p-4  rounded-xl flex flex-col gap-y-3 w-[50vw] h-fit py-2 cursor-pointer">
