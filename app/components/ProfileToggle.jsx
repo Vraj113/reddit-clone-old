@@ -48,7 +48,7 @@ const ProfileToggle = () => {
           </div>
           <button
             onClick={() => signOut()}
-            className="hover:bg-red-600 hover:text-white cursor-pointer rounded p-2 my-2 w-full text-left"
+            className="hover:bg-red-600 hover:text-white cursor-pointer rounded p-2  w-full text-left"
           >
             Logout
           </button>
