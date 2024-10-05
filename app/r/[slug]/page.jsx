@@ -34,15 +34,17 @@ const SubReddit = async ({ params }) => {
           bannerImage={subredditData.bannerImage}
         />
       )}
-      <div className="w-full border-2 mb-4 border-zinc-500"></div>
-      <div className="text-4xl font-semibold">Posts</div>
+      <div className="w-full border-t-2 mb-4 border-zinc-400"></div>
+      <div className="text-4xl font-semibold rounded bg-zinc-50 w-fit p-2 hover:bg-zinc-100   ">
+        Posts
+      </div>
       {posts.length > 0 ? (
         posts.map((post) => (
           <Post
             key={post.id}
             title={post.title}
             description={post.description}
-            postedBy={post.username}
+            postedBy={post.postedBy}
             votes={post.votes}
             subredditId={post.subredditId}
             slug={post.slug}

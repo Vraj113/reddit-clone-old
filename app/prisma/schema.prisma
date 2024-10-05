@@ -65,10 +65,10 @@ model Posts {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
-  type        String
-  userId      String 
+  type        String 
   postedBy String 
   subredditId String    
+  postedByEmail String
   slug String    @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

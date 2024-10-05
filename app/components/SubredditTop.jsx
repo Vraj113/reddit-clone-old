@@ -10,7 +10,9 @@ const SubredditTop = ({ name, description, image, bannerImage }) => {
         <img src={image} className="w-24   h-24 rounded-full" />
         <div className="text-4xl font-bold ml-4">r/{name}</div>
       </div>
-      <div className="border-2 text-lg   p-2 my-4  rounded">{description}</div>
+      <div className="border-2 text-lg   p-2 my-4  rounded-xl">
+        {description}
+      </div>
     </div>
   );
 };

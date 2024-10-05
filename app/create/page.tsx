@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { getSession } from "next-auth/react";
+import Select from "react-select";
 
 export const Create = () => {
   const [data, setData] = useState({
-    userId: "",
     email: "",
     name: "",
     title: "",
@@ -13,14 +13,22 @@ export const Create = () => {
     subredditId: "",
   });
 
+  const options = [
+    { value: "All", label: "All" },
+    { value: "AskReddit", label: "AskReddit" },
+    { value: "Vent", label: "Vent" },
+    { value: "DarkReddit", label: "DarkReddit" },
+    { value: "NewToReddit", label: "NewToReddit" },
+  ];
+
   useEffect(() => {
     // Get the session and set the userId when the component mounts
     const fetchSession = async () => {
       const session = await getSession();
-      if (session?.user?.id) {
+
+      if (session) {
         setData((prevData) => ({
           ...prevData,
-          userId: session.user.id,
           email: session.user?.email,
           name: session.user?.name,
         }));
@@ -29,18 +37,37 @@ export const Create = () => {
     fetchSession();
   }, []);
 
+  // General input change handler for text inputs
   const onChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
+    console.log(data);
+  };
+
+  // Separate onChange handler for react-select
+  const onSelectChange = (selectedOption) => {
+    setData({ ...data, subredditId: selectedOption.value });
   };
 
   const onSubmit = async () => {
-    await fetch("api/posts", {
+    const res = await fetch("/api/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data), // Send userId along with other post data
     });
+    const response = await res.json();
+    if (response.success) {
+      setData({
+        userId: "",
+        email: "",
+        name: "",
+        title: "",
+        description: "",
+        type: "TEXT",
+        subredditId: "",
+      });
+    }
   };
 
   return (
@@ -49,19 +76,20 @@ export const Create = () => {
 
       <div className="flex gap-x-2 items-center text-lg">
         <div className="text-3xl">r/</div>
-        <input
-          type="text"
-          name="subredditId"
-          value={data.subredditId}
-          onChange={onChange}
-          className="outline-1 border-2 p-1 rounded-[5px] outline-blue-600 w-[200px] border-zinc-400 my-2"
+        <Select
+          value={options.find((option) => option.value === data.subredditId)}
+          onChange={onSelectChange} // Use the new onSelectChange handler here
+          options={options}
+          className="outline-1 p-1 rounded-[5px] outline-blue-600 w-[200px] border-zinc-400 my-2"
         />
       </div>
+
       <div className="flex gap-x-2 p-2 my-2">
         <div className="border-b-2 border-blue-700 cursor-pointer">Text</div>
         <div>Images</div>
         <div>Link</div>
       </div>
+
       <div>
         <div>
           <input
@@ -83,6 +111,7 @@ export const Create = () => {
           ></textarea>
         </div>
       </div>
+
       <div>
         <button
           onClick={onSubmit}

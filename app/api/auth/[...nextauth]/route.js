@@ -30,21 +30,21 @@ export const authOptions = {
       return session;
     },
 
-    async jwt({ token, user, account, profile, isNewUser }) {
-      console.log(user);
-      let newUser = await prisma.user.findFirst({
-        where: {
-          id: user.id,
-        },
-      });
+    // async jwt({ token, user, account, profile, isNewUser }) {
+    //   console.log(user);
+    //   let newUser = await prisma.user.findFirst({
+    //     where: {
+    //       id: user.id,
+    //     },
+    //   });
 
-      if (account) {
-        token.accessToken = account.access_token; // Store access token
-        token.id = user?.id; // Store user ID in token
-        token.username = newUser.username;
-      }
-      return token;
-    },
+    //   if (account) {
+    //     token.accessToken = account.access_token; // Store access token
+    //     token.id = user?.id; // Store user ID in token
+    //     token.username = newUser.username;
+    //   }
+    //   return token;
+    // },
   },
 
   jwt: {

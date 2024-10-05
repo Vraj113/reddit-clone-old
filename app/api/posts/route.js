@@ -4,27 +4,6 @@ import randomstring from "randomstring";
 export const GET = async () => {
   const posts = await prisma.posts.findMany({});
   return NextResponse.json(posts);
-
-  // try {
-  //   const posts = await prisma.posts.findMany({});
-  //   const users = await prisma.user.findMany({});
-
-  //   const userMap = users.reduce((acc, user) => {
-  //     acc[user.id] = user.name;
-  //     return acc;
-  //   }, {});
-  //   const postsWithUsernames = posts.map((post) => ({
-  //     ...post,
-  //     username: userMap[post.userId] || "Unknown User", // Add username or "Unknown User" if not found
-  //   }));
-
-  //   return NextResponse.json(postsWithUsernames);
-  // } catch (error) {
-  //   return NextResponse.json(
-  //     { error: "Failed to fetch posts", error },
-  //     { status: 500 }
-  //   );
-  // }
 };
 
 export const POST = async (req) => {
@@ -38,14 +17,12 @@ export const POST = async (req) => {
       title: body.title,
       description: body.description,
       type: body.type,
-      userId: body.userId,
+      postedByEmail: body.email,
       postedBy: body.name,
       subredditId: body.subredditId,
       slug: slug,
     },
   });
 
-  const posts = await prisma.posts.findMany({});
-
-  return NextResponse.json(posts);
+  return NextResponse.json({ success: true });
 };
