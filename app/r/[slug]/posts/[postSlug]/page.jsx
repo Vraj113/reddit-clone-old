@@ -7,6 +7,7 @@ import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ShareIcon from "@mui/icons-material/Share";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import Link from "next/link";
 const Post = async ({ params }) => {
   const post = await prisma.posts.findFirst({
     where: {
@@ -47,7 +48,9 @@ const Post = async ({ params }) => {
                 />
               }
             </div>
-            <div className="text-xl ml-2">r/{post.subredditId}</div>
+            <Link href={"/r/" + post.subredditId}>
+              <div className="text-xl ml-2">r/{post.subredditId}</div>
+            </Link>
           </div>
           <div>
             Posted By <b>{user.name}</b>
