@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { getSession } from "next-auth/react";
 import Select from "react-select";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const Create = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
@@ -58,8 +60,14 @@ export const Create = () => {
   };
 
   const onSubmit = async () => {
-    console.log("onSubmit Ran");
-
+    if (data.title === "" || data.description === "") {
+      if (selectedImage) {
+        return;
+      } else {
+        showToast("warning", "Please fill all the fields");
+        return;
+      }
+    }
     let imageURL = data.imageURL;
     if (selectedImage) {
       const fd = new FormData();
@@ -92,6 +100,7 @@ export const Create = () => {
 
     const response = await res.json();
     if (response.success) {
+      showToast("success", "Posted Successfully");
       setData({
         email: updatedData.email,
         name: updatedData.name,
@@ -105,9 +114,34 @@ export const Create = () => {
       setPreviewImage(null); // Clear image preview after submission
     }
   };
-
+  const showToast = (e: string, msg: string) => {
+    if (e !== "warning") {
+      toast.success(msg, {
+        position: "bottom-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      toast.error(msg, {
+        position: "bottom-left",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
   return (
     <div className="flex-col flex gap-y-4 py-4 px-8 bg-zinc-50 h-full">
+      <ToastContainer />
       <div className="font-semibold text-3xl">Create Post</div>
 
       <div className="flex gap-x-2 items-center text-lg">
