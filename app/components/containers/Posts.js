@@ -23,6 +23,8 @@ const Posts = () => {
           postedBy={post.postedBy}
           votes={post.votes}
           slug={post.slug}
+          createdAt={post.createdAt}
+          imageURL={post.imageURL}
           subredditId={post.subredditId}
         />
       ))}

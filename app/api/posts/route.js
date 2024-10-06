@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 import prisma from "../../../lib/prisma";
 import randomstring from "randomstring";
 export const GET = async () => {
-  const posts = await prisma.posts.findMany({});
+  const posts = await prisma.posts.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
   return NextResponse.json(posts);
 };
 
 export const POST = async (req) => {
   const body = await req.json();
-  console.log("In Body");
-  console.log(body);
   const slug = randomstring.generate({
     length: 12,
     charset: "alphabetic",

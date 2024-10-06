@@ -58,47 +58,28 @@ export const Create = () => {
   };
 
   const onSubmit = async () => {
-    if (!selectedImage && data.description !== "") {
-      const res = await fetch("/api/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+    console.log("onSubmit Ran");
 
-      const response = await res.json();
-      if (response.success) {
-        setData({
-          ...data,
-          title: "",
-          description: "",
-          type: "TEXT",
-          imageURL: "",
-        });
-      }
+    let imageURL = data.imageURL;
+    if (selectedImage) {
+      const fd = new FormData();
+      fd.append("file", selectedImage);
+      fd.append("upload_preset", "szsvcewb");
+
+      const resCloud = await fetch(
+        "https://api.cloudinary.com/v1_1/dz5tq2gjz/image/upload",
+        {
+          method: "POST",
+          body: fd,
+        }
+      );
+      const imageData = await resCloud.json();
+      imageURL = imageData.url;
     }
-    const fd = new FormData();
-    fd.append("file", selectedImage);
-    fd.append("upload_preset", "szsvcewb");
-
-    const resCloud = await fetch(
-      "https://api.cloudinary.com/v1_1/dz5tq2gjz/image/upload",
-      {
-        method: "POST",
-        body: fd,
-      }
-    );
-    const imageData = await resCloud.json();
-
-    setData((prevData) => ({
-      ...prevData,
-      imageURL: imageData.url,
-    }));
 
     const updatedData = {
       ...data,
-      imageURL: imageData.url,
+      imageURL,
     };
 
     const res = await fetch("/api/posts", {
@@ -112,12 +93,16 @@ export const Create = () => {
     const response = await res.json();
     if (response.success) {
       setData({
-        ...data,
+        email: updatedData.email,
+        name: updatedData.name,
         title: "",
         description: "",
         type: "TEXT",
+        subredditId: "",
         imageURL: "",
       });
+      setSelectedImage(null); // Clear selected image after submission
+      setPreviewImage(null); // Clear image preview after submission
     }
   };
 
@@ -173,7 +158,7 @@ export const Create = () => {
           <div>
             <input
               type="text"
-              placeholder="title"
+              placeholder="Title"
               name="title"
               value={data.title}
               className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
@@ -182,7 +167,7 @@ export const Create = () => {
           </div>
           <div>
             <textarea
-              placeholder="description"
+              placeholder="Description"
               name="description"
               value={data.description}
               onChange={onChange}

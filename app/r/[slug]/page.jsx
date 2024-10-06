@@ -48,6 +48,8 @@ const SubReddit = async ({ params }) => {
             votes={post.votes}
             subredditId={post.subredditId}
             slug={post.slug}
+            createdAt={post.createdAt}
+            imageURL={post.imageURL}
           />
         ))
       ) : (

@@ -14,15 +14,44 @@ const Post = ({
   postedBy,
   votes,
   slug,
+  createdAt,
+  imageURL,
   subredditId,
 }) => {
+  function convertISOToRelativeTime(isoString) {
+    const date = new Date(isoString);
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+
+    const intervals = {
+      year: 31536000, // 365 days
+      month: 2592000, // 30 days
+      week: 604800, // 7 days
+      day: 86400, // 1 day
+      hour: 3600, // 1 hour
+      minute: 60, // 1 minute
+      second: 1, // 1 second
+    };
+
+    for (const interval in intervals) {
+      const count = Math.floor(seconds / intervals[interval]);
+      if (count > 0) {
+        return count === 1
+          ? `${count} ${interval} ago`
+          : `${count} ${interval}s ago`;
+      }
+    }
+
+    return "just now"; // In case the time difference is very small
+  }
   return (
     <div className=" my-4 w-fit border-b-2 hover:bg-gray-100 bg-white shadow-md shadow-zinc-100 rounded-lg  ">
       {" "}
       <Link href={`/r/${subredditId}/posts/${slug}`}>
         <div className="  p-4  rounded-xl flex flex-col gap-y-3 w-[50vw] h-fit py-2 cursor-pointer">
           <div className="text-sm">
-            r/{subredditId} • 4 days ago • Posted By <b>{postedBy}</b>
+            r/{subredditId} • {convertISOToRelativeTime(createdAt)} • Posted By{" "}
+            <b>{postedBy}</b>
           </div>
           <div className="text-lg font-semibold">{title}</div>
           {img && (
@@ -32,6 +61,11 @@ const Post = ({
             />
           )}
           <div className="text-xl">{description}</div>
+          {imageURL && (
+            <div className="flex justify-center ">
+              <img className="h-[300px] w-auto rounded-xl" src={imageURL} />
+            </div>
+          )}
         </div>
       </Link>
       <div className="flex gap-x-2   border-2 rounded-full bg-zinc-50 w-fit p-2 border-zinc-500 m-4">
