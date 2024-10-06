@@ -8,21 +8,39 @@ export const GET = async () => {
 
 export const POST = async (req) => {
   const body = await req.json();
+  console.log("In Body");
+  console.log(body);
   const slug = randomstring.generate({
     length: 12,
     charset: "alphabetic",
   });
-  await prisma.posts.create({
-    data: {
-      title: body.title,
-      description: body.description,
-      type: body.type,
-      postedByEmail: body.email,
-      postedBy: body.name,
-      subredditId: body.subredditId,
-      slug: slug,
-    },
-  });
+  if (body.type == "IMAGE") {
+    await prisma.posts.create({
+      data: {
+        title: body.title,
+        imageURL: body.imageURL,
+        type: body.type,
+        postedByEmail: body.email,
+        postedBy: body.name,
+        subredditId: body.subredditId,
+        slug: slug,
+      },
+    });
 
-  return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true });
+  } else if (body.type == "TEXT") {
+    await prisma.posts.create({
+      data: {
+        title: body.title,
+        description: body.description,
+        type: body.type,
+        postedByEmail: body.email,
+        postedBy: body.name,
+        subredditId: body.subredditId,
+        slug: slug,
+      },
+    });
+
+    return NextResponse.json({ success: true });
+  }
 };

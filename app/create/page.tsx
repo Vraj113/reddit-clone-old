@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { getSession } from "next-auth/react";
 import Select from "react-select";
-
 export const Create = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
   const [data, setData] = useState({
     email: "",
     name: "",
@@ -11,6 +13,7 @@ export const Create = () => {
     description: "",
     type: "TEXT",
     subredditId: "",
+    imageURL: "",
   });
 
   const options = [
@@ -21,26 +24,32 @@ export const Create = () => {
     { value: "NewToReddit", label: "NewToReddit" },
   ];
 
+  const fetchSession = async () => {
+    const session = await getSession();
+
+    if (session) {
+      setData((prevData) => ({
+        ...prevData,
+        email: session.user?.email || "",
+        name: session.user?.name || "",
+      }));
+    }
+  };
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
   useEffect(() => {
     // Get the session and set the userId when the component mounts
-    const fetchSession = async () => {
-      const session = await getSession();
-
-      if (session) {
-        setData((prevData) => ({
-          ...prevData,
-          email: session.user?.email,
-          name: session.user?.name,
-        }));
-      }
-    };
     fetchSession();
   }, []);
 
   // General input change handler for text inputs
   const onChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
-    console.log(data);
   };
 
   // Separate onChange handler for react-select
@@ -49,23 +58,65 @@ export const Create = () => {
   };
 
   const onSubmit = async () => {
+    if (!selectedImage && data.description !== "") {
+      const res = await fetch("/api/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const response = await res.json();
+      if (response.success) {
+        setData({
+          ...data,
+          title: "",
+          description: "",
+          type: "TEXT",
+          imageURL: "",
+        });
+      }
+    }
+    const fd = new FormData();
+    fd.append("file", selectedImage);
+    fd.append("upload_preset", "szsvcewb");
+
+    const resCloud = await fetch(
+      "https://api.cloudinary.com/v1_1/dz5tq2gjz/image/upload",
+      {
+        method: "POST",
+        body: fd,
+      }
+    );
+    const imageData = await resCloud.json();
+
+    setData((prevData) => ({
+      ...prevData,
+      imageURL: imageData.url,
+    }));
+
+    const updatedData = {
+      ...data,
+      imageURL: imageData.url,
+    };
+
     const res = await fetch("/api/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data), // Send userId along with other post data
+      body: JSON.stringify(updatedData),
     });
+
     const response = await res.json();
     if (response.success) {
       setData({
-        userId: "",
-        email: "",
-        name: "",
+        ...data,
         title: "",
         description: "",
         type: "TEXT",
-        subredditId: "",
+        imageURL: "",
       });
     }
   };
@@ -140,7 +191,48 @@ export const Create = () => {
           </div>
         </div>
       )}
-      {data.type == "IMAGE" && <div className="imageClass"></div>}
+      {data.type == "IMAGE" && (
+        <div className="imageClass">
+          <div>
+            <input
+              type="text"
+              placeholder="title"
+              name="title"
+              value={data.title}
+              className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
+              onChange={onChange}
+            />
+          </div>{" "}
+          <div>
+            <input
+              type="file"
+              id="imgInput"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+            <label
+              htmlFor="imgInput"
+              className="border-2 border-blue-500 border-dashed w-[500px] h-auto min-h-[200px] max-h-[500px] rounded-lg overflow-hidden justify-center items-center flex"
+            >
+              {!previewImage && (
+                <div className="font-semibold w-fit">
+                  Please Upload an image
+                </div>
+              )}
+              {previewImage && (
+                <div>
+                  <img
+                    src={previewImage}
+                    alt="Selected"
+                    className="w-full h-full"
+                  />
+                </div>
+              )}
+            </label>
+          </div>
+        </div>
+      )}
       <div>
         <button
           onClick={onSubmit}

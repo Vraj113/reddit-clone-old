@@ -25,7 +25,7 @@ const Post = async ({ params }) => {
     },
   });
 
-  console.log(subredditData);
+  console.log(post);
   if (!subredditData) {
     // console.log();
     return (
@@ -59,6 +59,14 @@ const Post = async ({ params }) => {
           </div>
           <div className="text-4xl font-semibold">{post.title}</div>
           <div className="text-lg text-zinc-700 mt-4">{post.description}</div>
+          <div className="  overflow-hidden justify-center flex  ">
+            {post.imageURL && (
+              <img
+                className="w-auto h-[400px] rounded-xl"
+                src={post.imageURL}
+              />
+            )}
+          </div>
           <div className="flex gap-x-2   border-2 rounded-full bg-zinc-50 w-fit p-2 border-zinc-500 m-4">
             <div className="group p-1 px-2 rounded-xl   border-black cursor-pointer ">
               <div className="group-hover:hidden">

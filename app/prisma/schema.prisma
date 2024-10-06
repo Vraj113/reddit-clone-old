@@ -64,7 +64,8 @@ model Subreddit {
 model Posts {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  description String
+  description String?
+  imageURL String?
   type        String 
   postedBy String 
   subredditId String    
