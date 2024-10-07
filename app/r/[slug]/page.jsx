@@ -28,6 +28,7 @@ const SubReddit = async ({ params }) => {
     <div className="mx-28">
       {subredditData && (
         <SubredditTop
+          slug={params.slug}
           name={subredditData.name}
           description={subredditData.description}
           image={subredditData.image}

@@ -1,13 +1,23 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Comment from "../Comment";
 
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ShareIcon from "@mui/icons-material/Share";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-const Comments = () => {
+const Comments = ({ slug }) => {
+  const [commentsData, setCommentsData] = useState([]);
+  const getComments = async () => {
+    const res = await fetch("../../../api/comments", {
+      method: "PUT",
+      body: JSON.stringify({ slug }),
+    });
+    const data = await res.json();
+    console.log(data);
+    setCommentsData(data.comments);
+  };
+  useEffect(() => {
+    console.log(slug);
+    getComments();
+  }, []);
+
   return (
     <div>
       <div className="  p-4 border2  mt-8 shadow-lg  bg-white rounded-lg mx-28  ">
@@ -21,115 +31,17 @@ const Comments = () => {
             Post
           </button>
         </div>
-
-        <div className="bg-zinc-100 p-4 rounded-xl my-2">
-          <div className="flex gap-x-5 text-xl items-center font-semibold">
-            <div>Vraj</div>
-            <div className="text-sm">1 day ago</div>
-          </div>
-          <div className="font-semibold text-xl mt-2 text-zinc-700">
-            This Post is hilarious af... hahahah
-          </div>
-          <div className="flex   mt-2     w-fit py-2    ">
-            <div className="group p-1 px-2 rounded-xl   border-black cursor-pointer ">
-              <div className="group-hover:hidden">
-                <ThumbUpOutlinedIcon />
-              </div>
-              <div className="hidden group-hover:block">
-                <ThumbUpIcon />
-              </div>
-            </div>
-            <div className="p-1 px-2 rounded-xl   border-black cursor-pointer ">
-              {0}
-            </div>
-            <div className=" group p-1 px-2 rounded-xl  border-black cursor-pointer ">
-              <ThumbDownOutlinedIcon className="group-hover:hidden" />
-              <div className="hidden group-hover:block">
-                <ThumbDownIcon />
-              </div>
-            </div>
-            <div className=" group p-1 px-2 rounded-xl  border-black cursor-pointer ">
-              <div className="group-hover:hidden">
-                <ShareOutlinedIcon />
-              </div>
-              <div className="hidden group-hover:block">
-                <ShareIcon />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-zinc-100 p-4 rounded-xl my-2">
-          <div className="flex gap-x-5 text-xl items-center font-semibold">
-            <div>Vraj</div>
-            <div className="text-sm">1 day ago</div>
-          </div>
-          <div className="font-semibold text-xl mt-2 text-zinc-700">
-            This Post is hilarious af... hahahah
-          </div>
-          <div className="flex   mt-2     w-fit py-2    ">
-            <div className="group p-1 px-2 rounded-xl   border-black cursor-pointer ">
-              <div className="group-hover:hidden">
-                <ThumbUpOutlinedIcon />
-              </div>
-              <div className="hidden group-hover:block">
-                <ThumbUpIcon />
-              </div>
-            </div>
-            <div className="p-1 px-2 rounded-xl   border-black cursor-pointer ">
-              {0}
-            </div>
-            <div className=" group p-1 px-2 rounded-xl  border-black cursor-pointer ">
-              <ThumbDownOutlinedIcon className="group-hover:hidden" />
-              <div className="hidden group-hover:block">
-                <ThumbDownIcon />
-              </div>
-            </div>
-            <div className=" group p-1 px-2 rounded-xl  border-black cursor-pointer ">
-              <div className="group-hover:hidden">
-                <ShareOutlinedIcon />
-              </div>
-              <div className="hidden group-hover:block">
-                <ShareIcon />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-zinc-100 p-4 rounded-xl my-2">
-          <div className="flex gap-x-5 text-xl items-center font-semibold">
-            <div>Vraj</div>
-            <div className="text-sm">1 day ago</div>
-          </div>
-          <div className="font-semibold text-xl mt-2 text-zinc-700">
-            This Post is hilarious af... hahahah
-          </div>
-          <div className="flex   mt-2     w-fit py-2    ">
-            <div className="group p-1 px-2 rounded-xl   border-black cursor-pointer ">
-              <div className="group-hover:hidden">
-                <ThumbUpOutlinedIcon />
-              </div>
-              <div className="hidden group-hover:block">
-                <ThumbUpIcon />
-              </div>
-            </div>
-            <div className="p-1 px-2 rounded-xl   border-black cursor-pointer ">
-              {0}
-            </div>
-            <div className=" group p-1 px-2 rounded-xl  border-black cursor-pointer ">
-              <ThumbDownOutlinedIcon className="group-hover:hidden" />
-              <div className="hidden group-hover:block">
-                <ThumbDownIcon />
-              </div>
-            </div>
-            <div className=" group p-1 px-2 rounded-xl  border-black cursor-pointer ">
-              <div className="group-hover:hidden">
-                <ShareOutlinedIcon />
-              </div>
-              <div className="hidden group-hover:block">
-                <ShareIcon />
-              </div>
-            </div>
-          </div>
-        </div>
+        {commentsData.map((comment) => {
+          return (
+            <Comment
+              key={comment.id}
+              name={comment.postedByName}
+              email={comment.email}
+              content={comment.content}
+              postedOn={comment.createdAt}
+            />
+          );
+        })}
       </div>
     </div>
   );

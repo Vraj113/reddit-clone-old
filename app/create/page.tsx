@@ -60,13 +60,13 @@ export const Create = () => {
   };
 
   const onSubmit = async () => {
-    if (data.title === "" || data.description === "") {
-      if (selectedImage) {
-        return;
-      } else {
-        showToast("warning", "Please fill all the fields");
-        return;
-      }
+    if (!data.subredditId) {
+      showToast("warning", "Please choose a Subreddit");
+      return;
+    }
+    if (!data.title || (!data.description && !selectedImage)) {
+      showToast("warning", "Please fill all the fields");
+      return;
     }
     let imageURL = data.imageURL;
     if (selectedImage) {

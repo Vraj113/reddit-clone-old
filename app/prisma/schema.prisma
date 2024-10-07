@@ -16,13 +16,12 @@ datasource db {
 model User {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  username String  @default("")
+  username      String          @default("")
   email         String?         @unique
   emailVerified DateTime?
-  image         String?
+  image         String[]        @default([])
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
   Authenticator Authenticator[]
 
   createdAt DateTime @default(now())
@@ -55,25 +54,25 @@ model Subreddit {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String   @unique
   description String
-  image    String? 
-  bannerImage    String? 
+  image       String?
+  bannerImage String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Posts {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description String?
-  imageURL String?
-  type        String 
-  postedBy String 
-  subredditId String    
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String?
+  imageURL      String?
+  type          String
+  postedBy      String
+  subredditId   String
   postedByEmail String
-  slug String    @default("")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  votes       Int      @default(0)
+  slug          String   @default("")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  votes         Int      @default(0)
 }
 
 model Session {
@@ -86,7 +85,6 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
 
 // Optional for WebAuthn support
 model Authenticator {
@@ -105,9 +103,10 @@ model Authenticator {
 }
 
 model Comment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  postId    String   @db.ObjectId // Reference to Post
-  userId    String   @db.ObjectId // Reference to User
-  content   String
-  createdAt DateTime @default(now())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  postSlug      String
+  postedByEmail String
+  postedByName  String
+  content       String
+  createdAt     DateTime @default(now())
 }
