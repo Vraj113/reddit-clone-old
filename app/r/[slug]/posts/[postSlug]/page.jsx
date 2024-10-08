@@ -8,6 +8,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ShareIcon from "@mui/icons-material/Share";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import Link from "next/link";
+import LinkPreview from "@/app/components/LinkPreview";
 const Post = async ({ params }) => {
   const post = await prisma.posts.findFirst({
     where: {
@@ -55,12 +56,10 @@ const Post = async ({ params }) => {
           </div>
           <div className="text-4xl font-semibold">{post.title}</div>
           <div className="text-lg text-zinc-700 mt-4">{post.description}</div>
+          {post.link && <LinkPreview link={post.link} />}
           <div className="  overflow-hidden justify-center flex  ">
             {post.imageURL && (
-              <img
-                className="w-auto h-[400px] rounded-xl"
-                src={post.imageURL}
-              />
+              <img className="max-h-[600px] rounded-xl" src={post.imageURL} />
             )}
           </div>
           <div className="flex gap-x-2   border-2 rounded-full bg-zinc-50 w-fit p-2 border-zinc-500 m-4">

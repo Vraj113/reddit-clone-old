@@ -20,6 +20,7 @@ const Posts = () => {
           key={post.id}
           title={post.title}
           description={post.description}
+          link={post.link}
           postedBy={post.postedBy}
           votes={post.votes}
           slug={post.slug}

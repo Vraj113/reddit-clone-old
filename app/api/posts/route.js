@@ -44,5 +44,20 @@ export const POST = async (req) => {
     });
 
     return NextResponse.json({ success: true });
+  } else if (body.type == "LINK") {
+    await prisma.posts.create({
+      data: {
+        title: body.title,
+        link: body.link,
+        type: body.type,
+        type: body.type,
+        postedByEmail: body.email,
+        postedBy: body.name,
+        subredditId: body.subredditId,
+        slug: slug,
+      },
+    });
+
+    return NextResponse.json({ success: true });
   }
 };

@@ -6,9 +6,11 @@ import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ShareIcon from "@mui/icons-material/Share";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import LinkPreview from "./LinkPreview";
 const Post = ({
   title,
   img,
+  link,
   description,
   postedBy,
   votes,
@@ -43,6 +45,7 @@ const Post = ({
 
     return "just now"; // In case the time difference is very small
   }
+
   return (
     <div className=" my-4 w-fit border-b-2 hover:bg-gray-100 bg-white shadow-md shadow-zinc-100 rounded-lg  ">
       {" "}
@@ -59,10 +62,11 @@ const Post = ({
               src="https://preview.redd.it/was-rewatching-wandavision-and-noticed-this-black-heart-v0-5ftbeku9hqqd1.jpg?width=1080&crop=smart&auto=webp&s=0761e434a76e603e6964465bd1ee3e20f42d8183"
             />
           )}
-          <div className="text-xl">{description}</div>
+          {description && <div className="text-xl">{description}</div>}
+          {link && <LinkPreview link={link} />}
           {imageURL && (
             <div className="flex justify-center ">
-              <img className="h-[300px] w-auto rounded-xl" src={imageURL} />
+              <img className="rounded-xl" src={imageURL} />
             </div>
           )}
         </div>

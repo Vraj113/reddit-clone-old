@@ -20,6 +20,9 @@ const SubReddit = async ({ params }) => {
         where: {
           subredditId: subreddit, // Use the ID from the subreddit data
         },
+        orderBy: {
+          createdAt: "desc", // Change this to the field you want to sort by
+        },
       });
     }
   }
@@ -45,6 +48,7 @@ const SubReddit = async ({ params }) => {
             key={post.id}
             title={post.title}
             description={post.description}
+            link={post.link}
             postedBy={post.postedBy}
             votes={post.votes}
             subredditId={post.subredditId}

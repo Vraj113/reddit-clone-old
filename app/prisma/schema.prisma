@@ -20,6 +20,7 @@ model User {
   email         String?         @unique
   emailVerified DateTime?
   image         String[]        @default([])
+  joinedSubs    String[]        @default([])
   accounts      Account[]
   sessions      Session[]
   Authenticator Authenticator[]
@@ -64,6 +65,7 @@ model Posts {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String?
+  link          String?
   imageURL      String?
   type          String
   postedBy      String

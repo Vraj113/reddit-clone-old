@@ -12,6 +12,7 @@ export const Create = () => {
     email: "",
     name: "",
     title: "",
+    link: "",
     description: "",
     type: "TEXT",
     subredditId: "",
@@ -24,6 +25,7 @@ export const Create = () => {
     { value: "Vent", label: "Vent" },
     { value: "DarkReddit", label: "DarkReddit" },
     { value: "NewToReddit", label: "NewToReddit" },
+    { value: "News", label: "News" },
   ];
 
   const fetchSession = async () => {
@@ -58,16 +60,31 @@ export const Create = () => {
   const onSelectChange = (selectedOption) => {
     setData({ ...data, subredditId: selectedOption.value });
   };
-
+  function isValidURL(string: string) {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
   const onSubmit = async () => {
     if (!data.subredditId) {
       showToast("warning", "Please choose a Subreddit");
       return;
     }
-    if (!data.title || (!data.description && !selectedImage)) {
+    if (!data.title || (!data.description && !selectedImage && !data.link)) {
       showToast("warning", "Please fill all the fields");
       return;
     }
+    if (data.type === "LINK") {
+      const isValid = isValidURL(data.link);
+      if (!isValid) {
+        showToast("warning", "Please Provide a valid link");
+        return;
+      }
+    }
+    let link = data.link;
     let imageURL = data.imageURL;
     if (selectedImage) {
       const fd = new FormData();
@@ -88,6 +105,7 @@ export const Create = () => {
     const updatedData = {
       ...data,
       imageURL,
+      link,
     };
 
     const res = await fetch("/api/posts", {
@@ -109,6 +127,7 @@ export const Create = () => {
         type: "TEXT",
         subredditId: "",
         imageURL: "",
+        link: "",
       });
       setSelectedImage(null); // Clear selected image after submission
       setPreviewImage(null); // Clear image preview after submission
@@ -215,7 +234,7 @@ export const Create = () => {
           <div>
             <input
               type="text"
-              placeholder="title"
+              placeholder="Title"
               name="title"
               value={data.title}
               className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
@@ -249,6 +268,29 @@ export const Create = () => {
                 </div>
               )}
             </label>
+          </div>
+        </div>
+      )}
+      {data.type == "LINK" && (
+        <div>
+          <div>
+            <input
+              type="text"
+              placeholder="Title"
+              name="title"
+              value={data.title}
+              className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
+              onChange={onChange}
+            />
+          </div>
+          <div>
+            <textarea
+              placeholder="Link"
+              name="link"
+              value={data.link}
+              className="outline-1 border-2 p-2 text-lg rounded-[10px] w-[500px] border-zinc-400 my-2"
+              onChange={onChange}
+            ></textarea>
           </div>
         </div>
       )}
